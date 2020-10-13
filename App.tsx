@@ -10,7 +10,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 const App: React.FC = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={NavigationRoute.HOME} screenOptions={{ title: 'Foodies' }}>
+      <Stack.Navigator initialRouteName={NavigationRoute.HOME} screenOptions={{ title: 'Business Search' }}>
         <Stack.Screen name={NavigationRoute.HOME} component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
