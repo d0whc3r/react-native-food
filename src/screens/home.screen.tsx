@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import SearchBar from '../components/search-bar/search-bar.component';
 import { Business, BusinessSearch } from '../types';
@@ -7,25 +7,39 @@ import Api from '../api';
 const HomeScreen: React.FC = () => {
   const [term, setTerm] = useState('');
   const [results, setResults] = useState<Business[]>([]);
+  const [total, setTotal] = useState(0);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const searchApi = async () => {
-    Api.call<BusinessSearch>('/search', {
+  useEffect(() => {
+    void searchApi('pasta');
+  }, []);
+
+  const searchApi = async (term: string) => {
+    console.log('search api!', term);
+    Api.get<BusinessSearch>('/search', {
       params: {
         limit: 50,
-        term
+        term,
+        location: 'san jose'
       }
     })
       .then((data) => {
         setResults(data.businesses);
-        console.log('data?', data);
+        setTotal(data.total);
       })
-      .catch(console.error);
+      .catch(({ error }) => {
+        setErrorMessage(error.description);
+      });
   };
 
   return (
     <View>
-      <SearchBar term={term} onTermChange={setTerm} onTermSubmit={searchApi} />
-      <Text>Search results: {results.length}</Text>
+      <SearchBar term={term} onTermChange={setTerm} onTermSubmit={() => searchApi(term)} />
+      {errorMessage ? <Text>{errorMessage}</Text> : null}
+      <Text>
+        Search results: {results.length}
+        {total ? `/${total}` : null}
+      </Text>
     </View>
   );
 };
