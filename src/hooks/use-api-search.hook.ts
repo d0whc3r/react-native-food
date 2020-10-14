@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
-import SearchBar from '../components/search-bar/search-bar.component';
+import { useEffect, useState } from 'react';
 import { Business, BusinessSearch } from '../types';
 import Api from '../api';
 
-const HomeScreen: React.FC = () => {
-  const [term, setTerm] = useState('');
+const useApiSearch = (): [(term: string) => Promise<void>, Business[], number, string] => {
   const [results, setResults] = useState<Business[]>([]);
   const [total, setTotal] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
@@ -32,16 +29,7 @@ const HomeScreen: React.FC = () => {
       });
   };
 
-  return (
-    <View>
-      <SearchBar term={term} onTermChange={setTerm} onTermSubmit={() => searchApi(term)} />
-      {errorMessage ? <Text>{errorMessage}</Text> : null}
-      <Text>
-        Search results: {results.length}
-        {total ? `/${total}` : null}
-      </Text>
-    </View>
-  );
+  return [searchApi, results, total, errorMessage];
 };
 
-export default HomeScreen;
+export default useApiSearch;
