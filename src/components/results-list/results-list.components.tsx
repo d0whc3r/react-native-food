@@ -1,20 +1,22 @@
 import React from 'react';
 import { FlatListStyled, ResultContainer, ResultTitle, Subtitle } from './results-list.styles';
-import { Business, NavigationRoute, RootStackParamList } from '../../types';
+import { Business, BusinessSearch, NavigationRoute, RootStackParamList } from '../../types';
 import BusinessDetail from '../business-detail/business-detail.component';
-import { StackNavigationProp } from '@react-navigation/stack/src/types';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface ResultsListProps {
   title: string;
   results: Business[];
-  navigation: StackNavigationProp<RootStackParamList, NavigationRoute.HOME>;
 }
 
-const ResultsList: React.FC<ResultsListProps> = ({ title, results, navigation }) => {
+const ResultsList: React.FC<ResultsListProps> = ({ title, results }) => {
   if (!results?.length) {
     return null;
   }
+
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, NavigationRoute.HOME>>();
   return (
     <ResultContainer>
       <ResultTitle>
@@ -26,7 +28,7 @@ const ResultsList: React.FC<ResultsListProps> = ({ title, results, navigation })
         data={results}
         keyExtractor={(result) => result.id}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate(NavigationRoute.DETAIL)}>
+          <TouchableOpacity onPress={() => navigation.navigate(NavigationRoute.DETAIL, { id: item.id })}>
             <BusinessDetail detail={item} />
           </TouchableOpacity>
         )}

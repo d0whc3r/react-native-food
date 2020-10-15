@@ -8,6 +8,8 @@ export interface ApiCall {
   headers?: RequestInit['headers'];
 }
 
+export type RequestCall = Exclude<ApiCall, 'method'>;
+
 export default class Api {
   private static readonly apiKey = API_KEY;
   private static readonly baseUrl = 'https://api.yelp.com/v3/businesses';
@@ -30,7 +32,7 @@ export default class Api {
     return url + par;
   }
 
-  public static call<T>(path: string, { method = 'GET', params, headers = {} }: ApiCall = {}) {
+  private static call<T>(path: string, { method = 'GET', params, headers = {} }: ApiCall = {}) {
     return fetch(this.getUrl(path, params), {
       method,
       headers: { ...headers, ...this.headers },
@@ -46,15 +48,15 @@ export default class Api {
       .then<T>((response) => response.json());
   }
 
-  public static get<T>(path: string, info: Exclude<ApiCall, 'method'>) {
+  public static get<T>(path: string, info?: RequestCall) {
     return this.call<T>(path, { ...info, method: 'GET' });
   }
 
-  public static post<T>(path: string, info: Exclude<ApiCall, 'method'>) {
+  public static post<T>(path: string, info?: RequestCall) {
     return this.call<T>(path, { ...info, method: 'POST' });
   }
 
-  public static put<T>(path: string, info: Exclude<ApiCall, 'method'>) {
+  public static put<T>(path: string, info?: RequestCall) {
     return this.call<T>(path, { ...info, method: 'PUT' });
   }
 }

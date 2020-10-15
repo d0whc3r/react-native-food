@@ -3,10 +3,9 @@ import { ScrollView, Text } from 'react-native';
 import SearchBar from '../../components/search-bar/search-bar.component';
 import useApiSearch from '../../hooks/use-api-search.hook';
 import ResultsList from '../../components/results-list/results-list.components';
-import { BusinessPriceMap, NavigationRoute, RootStackParamList } from '../../types';
-import { StackScreenProps } from '@react-navigation/stack';
+import { BusinessPriceMap } from '../../types';
 
-const HomeScreen: React.FC<StackScreenProps<RootStackParamList, NavigationRoute.HOME>> = ({ navigation }) => {
+const HomeScreen: React.FC = () => {
   const [term, setTerm] = useState('');
   const [searchApi, results, errorMessage] = useApiSearch();
 
@@ -30,10 +29,10 @@ const HomeScreen: React.FC<StackScreenProps<RootStackParamList, NavigationRoute.
       <SearchBar term={term} onTermChange={setTerm} onTermSubmit={() => searchApi(term)} />
       {errorMessage ? <Text>{errorMessage}</Text> : null}
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ResultsList title="Cost Effective" results={resultsMap['$']} navigation={navigation} />
-        <ResultsList title="Bit Pricier" results={resultsMap['$$']} navigation={navigation} />
-        <ResultsList title="Big Spender" results={resultsMap['$$$']} navigation={navigation} />
-        <ResultsList title="Not defined price" results={resultsMap['unknown']} navigation={navigation} />
+        <ResultsList title="Cost Effective" results={resultsMap['$']} />
+        <ResultsList title="Bit Pricier" results={resultsMap['$$']} />
+        <ResultsList title="Big Spender" results={resultsMap['$$$']} />
+        <ResultsList title="Not defined price" results={resultsMap['unknown']} />
       </ScrollView>
     </>
   );

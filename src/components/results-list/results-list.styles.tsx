@@ -1,10 +1,12 @@
 import styled from 'styled-components/native';
+import { FlatList } from 'react-native';
+import { Business } from '../../types';
 
 export const ResultContainer = styled.View`
   margin: 0 0 0 10px;
 `;
 
-export const FlatListStyled = styled.FlatList`
+export const FlatListStyled = styled(FlatList as new () => FlatList<Business>)`
   margin-left: -10px;
 `;
 
