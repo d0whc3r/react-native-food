@@ -1,7 +1,9 @@
 export enum NavigationRoute {
-  HOME = 'Home'
+  HOME = 'Home',
+  DETAIL = 'Detail'
 }
 
 export type RootStackParamList = {
   [NavigationRoute.HOME]: undefined;
+  [NavigationRoute.DETAIL]: undefined;
 };

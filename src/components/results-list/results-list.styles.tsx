@@ -1,11 +1,11 @@
 import styled from 'styled-components/native';
 
 export const ResultContainer = styled.View`
-  margin-top: 0px;
+  margin: 0 0 0 10px;
 `;
 
 export const FlatListStyled = styled.FlatList`
-  margin-left: -20px;
+  margin-left: -10px;
 `;
 
 export const ResultTitle = styled.Text`

@@ -1,5 +1,6 @@
 // @ts-ignore
 import { API_KEY } from '@env';
+import { Platform } from 'react-native';
 
 export interface ApiCall {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -10,17 +11,16 @@ export interface ApiCall {
 export default class Api {
   private static readonly apiKey = API_KEY;
   private static readonly baseUrl = 'https://api.yelp.com/v3/businesses';
+  private static readonly corsUrl = 'https://cors-anywhere.herokuapp.com/';
   private static readonly headers: RequestInit['headers'] = {
     Authorization: `Bearer ${Api.apiKey!}`
   };
 
   private static getUrl(path: string, params?: object) {
-    const url = this.baseUrl + path;
+    const cors = Platform.OS === 'web' ? this.corsUrl : '';
+    const url = cors + this.baseUrl + path;
     let par = '';
     if (params) {
-      // Object.entries(params).forEach(([key, value]) => {
-      //   url.searchParams.set(key, value);
-      // });
       par =
         '?' +
         Object.entries(params)
@@ -33,7 +33,8 @@ export default class Api {
   public static call<T>(path: string, { method = 'GET', params, headers = {} }: ApiCall = {}) {
     return fetch(this.getUrl(path, params), {
       method,
-      headers: { ...headers, ...this.headers }
+      headers: { ...headers, ...this.headers },
+      mode: 'cors'
     })
       .then(async (response) => {
         if (response.ok) {

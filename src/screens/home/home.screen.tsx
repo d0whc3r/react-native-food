@@ -3,12 +3,12 @@ import { ScrollView, Text } from 'react-native';
 import SearchBar from '../../components/search-bar/search-bar.component';
 import useApiSearch from '../../hooks/use-api-search.hook';
 import ResultsList from '../../components/results-list/results-list.components';
-import { BusinessPriceMap } from '../../types';
-import { HomeContainer } from './home.styles';
+import { BusinessPriceMap, NavigationRoute, RootStackParamList } from '../../types';
+import { StackScreenProps } from '@react-navigation/stack';
 
-const HomeScreen: React.FC = () => {
+const HomeScreen: React.FC<StackScreenProps<RootStackParamList, NavigationRoute.HOME>> = ({ navigation }) => {
   const [term, setTerm] = useState('');
-  const [searchApi, results, total, errorMessage] = useApiSearch();
+  const [searchApi, results, errorMessage] = useApiSearch();
 
   const resultsMap: BusinessPriceMap = {
     $: [],
@@ -26,20 +26,16 @@ const HomeScreen: React.FC = () => {
   });
 
   return (
-    <HomeContainer>
+    <>
       <SearchBar term={term} onTermChange={setTerm} onTermSubmit={() => searchApi(term)} />
       {errorMessage ? <Text>{errorMessage}</Text> : null}
-      <Text>
-        Search results: {results.length}
-        {total ? `/${total}` : null}
-      </Text>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <ResultsList title="Cost Effective" results={resultsMap['$']} />
-        <ResultsList title="Bit Pricier" results={resultsMap['$$']} />
-        <ResultsList title="Big Spender" results={resultsMap['$$$']} />
-        <ResultsList title="Not defined price" results={resultsMap['unknown']} />
+        <ResultsList title="Cost Effective" results={resultsMap['$']} navigation={navigation} />
+        <ResultsList title="Bit Pricier" results={resultsMap['$$']} navigation={navigation} />
+        <ResultsList title="Big Spender" results={resultsMap['$$$']} navigation={navigation} />
+        <ResultsList title="Not defined price" results={resultsMap['unknown']} navigation={navigation} />
       </ScrollView>
-    </HomeContainer>
+    </>
   );
 };
 

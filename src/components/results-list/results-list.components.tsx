@@ -1,14 +1,17 @@
 import React from 'react';
 import { FlatListStyled, ResultContainer, ResultTitle, Subtitle } from './results-list.styles';
-import { Business } from '../../types';
+import { Business, NavigationRoute, RootStackParamList } from '../../types';
 import BusinessDetail from '../business-detail/business-detail.component';
+import { StackNavigationProp } from '@react-navigation/stack/src/types';
+import { TouchableOpacity } from 'react-native';
 
 interface ResultsListProps {
   title: string;
   results: Business[];
+  navigation: StackNavigationProp<RootStackParamList, NavigationRoute.HOME>;
 }
 
-const ResultsList: React.FC<ResultsListProps> = ({ title, results }) => {
+const ResultsList: React.FC<ResultsListProps> = ({ title, results, navigation }) => {
   if (!results?.length) {
     return null;
   }
@@ -20,9 +23,13 @@ const ResultsList: React.FC<ResultsListProps> = ({ title, results }) => {
       <FlatListStyled
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(result) => result.id}
         data={results}
-        renderItem={({ item }) => <BusinessDetail detail={item} />}
+        keyExtractor={(result) => result.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => navigation.navigate(NavigationRoute.DETAIL)}>
+            <BusinessDetail detail={item} />
+          </TouchableOpacity>
+        )}
       />
     </ResultContainer>
   );

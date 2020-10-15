@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 
 export const BusinessContainer = styled.View`
-  margin-left: 20px;
+  margin-left: 10px;
   margin-bottom: 20px;
 `;
 

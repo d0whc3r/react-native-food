@@ -4,7 +4,7 @@ export const SearchBarContainer = styled.View`
   background-color: #f0eeee;
   height: 50px;
   border-radius: 5px;
-  margin: 15px 20px 15px 0;
+  margin: 15px 10px;
   padding: 0 10px;
   border: 1px solid black;
   display: flex;

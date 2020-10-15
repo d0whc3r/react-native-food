@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { Business, BusinessSearch } from '../types';
 import Api from '../api';
 
-const useApiSearch = (): [(term: string) => Promise<void>, Business[], number, string] => {
+const useApiSearch = (): [(term: string) => Promise<void>, Business[], string] => {
   const [results, setResults] = useState<Business[]>([]);
-  const [total, setTotal] = useState(0);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -22,14 +21,17 @@ const useApiSearch = (): [(term: string) => Promise<void>, Business[], number, s
     })
       .then((data) => {
         setResults(data.businesses);
-        setTotal(data.total);
       })
-      .catch(({ error }) => {
-        setErrorMessage(error.description);
+      .catch((err) => {
+        if ('error' in err) {
+          setErrorMessage(err.error.description);
+        } else {
+          setErrorMessage(err.toString());
+        }
       });
   };
 
-  return [searchApi, results, total, errorMessage];
+  return [searchApi, results, errorMessage];
 };
 
 export default useApiSearch;
